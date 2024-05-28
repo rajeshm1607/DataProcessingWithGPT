@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Insights</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Enterprise Insights</h1>
+        <form id="inputForm">
+            <div class="form-group">
+                <label for="enterprise">Enterprise Name</label>
+                <input type="text" class="form-control" id="enterprise" name="enterprise" required>
+            </div>
+            <div class="form-group">
+                <label for="keywords">Keyword(s)</label>
+                <input type="text" class="form-control" id="keywords" name="keywords" required>
+            </div>
+            <div class="form-group">
+                <label for="insight_request">Insight Request</label>
+                <input type="text" class="form-control" id="insight_request" name="insight_request" required>
+            </div>
+            <div class="form-group">
+                <label for="websites">Specific Websites (comma-separated)</label>
+                <input type="text" class="form-control" id="websites" name="websites">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <div class="mt-5">
+            <h2>Insights:</h2>
+            <pre id="insights" class="bg-light p-3"></pre>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#inputForm').on('submit', function(event) {
+                event.preventDefault();
+                $.ajax({
+                    url: '/process',
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        $('#insights').text(response.insights);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
